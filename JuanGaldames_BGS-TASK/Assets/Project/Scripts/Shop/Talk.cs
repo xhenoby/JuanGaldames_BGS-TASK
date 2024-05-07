@@ -13,12 +13,17 @@ public class Talk : MonoBehaviour
     Action onFinish;
     public void ShowDialogue(Action onFinish, float textSpeed, string[] dialogue)
     {
+        gameObject.SetActive(true);
         this.onFinish = onFinish;
         this.textSpeed = textSpeed;
         this.dialogue = dialogue;
         index = 0;
         StopAllCoroutines();
         StartCoroutine(Type());
+    }
+    public void Hide()
+    {
+        gameObject.SetActive(false);
     }
 
     IEnumerator Type()
@@ -54,8 +59,9 @@ public class Talk : MonoBehaviour
             StartCoroutine(Type());
         }
         else
-        {
+        {          
             onFinish?.Invoke();
+            Hide();
         }
     }
 }
