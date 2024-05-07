@@ -1,58 +1,38 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using System;
 
 public class Talk : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI textMeshProUGUI;
-    [SerializeField] AudioSource miauSource;
-    float textSpeed = 0.05f;
+    [SerializeField] AudioSource talkAudioSource;
     string[] dialogue;
+    float textSpeed = 0.05f;
     int index;
     Action onFinish;
-    private void Start()
+    public void ShowDialogue(Action onFinish, float textSpeed, string[] dialogue)
     {
-        ShowDialogue(new string[] { "Hello every nyan", "How are you", "im fine thank you" }, () => gameObject.SetActive(false), 0.1f);
-    }
-    public void ShowDialogue(string[] dialogue, Action onFinish, float textSpeed)
-    {
-        gameObject.SetActive(true);
-
         this.onFinish = onFinish;
-        this.dialogue = dialogue;
         this.textSpeed = textSpeed;
+        this.dialogue = dialogue;
         index = 0;
-
         StopAllCoroutines();
         StartCoroutine(Type());
     }
+
     IEnumerator Type()
     {
         textMeshProUGUI.text = "";
         for (int character = 0; character < dialogue[index].Length; character++)
         {
-            miauSource.pitch = (UnityEngine.Random.Range(1, 1.5f));
-            miauSource.PlayOneShot(miauSource.clip);
+            talkAudioSource.pitch = (UnityEngine.Random.Range(1, 1.3f));
+            talkAudioSource.PlayOneShot(talkAudioSource.clip);
             textMeshProUGUI.text += dialogue[index][character];
             yield return new WaitForSeconds(textSpeed);
         }
     }
-    void NextLine()
-    {
-        if (index < dialogue.Length - 1)
-        {
-            index++;
-            StartCoroutine(Type());
-        }
-        else
-        {
-            onFinish?.Invoke();
-            gameObject.SetActive(true);
-        }
-    }
-    [ContextMenu("UpdateLine")]
+
     public void UpdateLine()
     {
         if (textMeshProUGUI.text == dialogue[index])
@@ -63,6 +43,19 @@ public class Talk : MonoBehaviour
         {
             StopAllCoroutines();
             textMeshProUGUI.text = dialogue[index];
+        }
+    }
+
+    void NextLine()
+    {
+        if (index < dialogue.Length - 1)
+        {
+            index++;
+            StartCoroutine(Type());
+        }
+        else
+        {
+            onFinish?.Invoke();
         }
     }
 }

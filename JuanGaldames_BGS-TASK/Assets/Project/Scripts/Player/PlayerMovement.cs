@@ -12,18 +12,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Rigidbody2D rb2d;
 
     Vector2 lastDirection;
+    public Vector2 LastDirection
+    {
+        get => lastDirection;
+    }
     public void OnMove(InputValue inputValue)
     {
         rb2d.velocity = inputValue.Get<Vector2>();
 
         bodieAnimator.SetFloat("Velocity", rb2d.velocity.magnitude);
-        
         clothAnimator.SetFloat("Velocity", rb2d.velocity.magnitude);
-        
         hairAnimator.SetFloat("Velocity", rb2d.velocity.magnitude);
-        
         hatAnimator.SetFloat("Velocity", rb2d.velocity.magnitude);
-        
+
         if (rb2d.velocity != Vector2.zero)
         {
             lastDirection = rb2d.velocity;
@@ -31,13 +32,10 @@ public class PlayerMovement : MonoBehaviour
 
         bodieAnimator.SetFloat("XDirection", lastDirection.x);
         bodieAnimator.SetFloat("YDirection", lastDirection.y);
-
         clothAnimator.SetFloat("XDirection", lastDirection.x);
         clothAnimator.SetFloat("YDirection", lastDirection.y);
-
         hairAnimator.SetFloat("XDirection", lastDirection.x);
         hairAnimator.SetFloat("YDirection", lastDirection.y);
-        
         hatAnimator.SetFloat("XDirection", lastDirection.x);
         hatAnimator.SetFloat("YDirection", lastDirection.y);
     }
