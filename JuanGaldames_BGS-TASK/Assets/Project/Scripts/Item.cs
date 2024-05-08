@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+using using UnityEngine;
 using UnityEngine.UI;
 
 public class Item : MonoBehaviour
@@ -9,6 +6,7 @@ public class Item : MonoBehaviour
     [SerializeField] Image icon;
     [SerializeField] Button Button;
     ItemType itemType;
+    bool equiped;
     PlayerAnimation playerAnimation;
     ScriptableItem scriptableItem;
 
@@ -16,7 +14,8 @@ public class Item : MonoBehaviour
     {
         Button.onClick.AddListener(Equip);
     }
-    public void SetItem(ItemType itemType,ScriptableItem scriptableItem, PlayerAnimation playerAnimation)
+
+    public void SetItem(ItemType itemType, ScriptableItem scriptableItem, PlayerAnimation playerAnimation)
     {
         this.itemType = itemType;
         this.scriptableItem = scriptableItem;
@@ -25,6 +24,7 @@ public class Item : MonoBehaviour
     }
     void Equip()
     {
+        Button.interactable = false;
         switch (itemType)
         {
             case ItemType.Hat:

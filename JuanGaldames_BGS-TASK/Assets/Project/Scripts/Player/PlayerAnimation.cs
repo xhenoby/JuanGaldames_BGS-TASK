@@ -25,10 +25,7 @@ public class PlayerAnimation : MonoBehaviour
 
     void LateUpdate()
     {
-        if (hasCloth)
-        {
-            ChangeSprite(clothRenderer, cloth.sprites);
-        }
+        if (hasCloth) ChangeSprite(clothRenderer, cloth.sprites);
         if (hasHat) ChangeSprite(hatRenderer, hat.sprites);
         if (!hasHat && hasHair) ChangeSprite(hairRenderer, hair.sprites);
     }

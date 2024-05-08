@@ -1,7 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class Shop : MonoBehaviour, IInteractable
@@ -12,7 +9,9 @@ public class Shop : MonoBehaviour, IInteractable
 
     [Header("References")]
     [SerializeField] Talk talkCanvas;
-    [SerializeField] GameObject shopUI;
+    [SerializeField] GameObject shopCanvas;
+    [SerializeField] GameObject sellScreen;
+    [SerializeField] GameObject buyScreen;
     [SerializeField] Transform BuyCategoryContainer;
     [SerializeField] Transform SellCategoryContainer;
     [SerializeField] PlayerMovement playerMovement;
@@ -23,11 +22,12 @@ public class Shop : MonoBehaviour, IInteractable
     [SerializeField] ItemCategory CategoryPrefab;
     [SerializeField] ScriptableItem[] ItemList;
 
-    List<ItemCategory> categories = new List<ItemCategory>();
+
+    List<ItemCategory> buyCategories = new List<ItemCategory>();
+    List<ItemCategory> sellCategories = new List<ItemCategory>();
 
     public bool IsTalking { get; private set; }
-    public Talk TalkCanvas { get => talkCanvas; }
-    public GameObject ShopUI { get => shopUI; }
+    public GameObject ShopCanvas { get => shopCanvas; }
 
     public void Interact()
     {
@@ -35,7 +35,8 @@ public class Shop : MonoBehaviour, IInteractable
         {
             return;
         }
-        if (shopUI.activeInHierarchy)
+
+        if (shopCanvas.activeInHierarchy)
         {
             HideShopUI();
             return;
@@ -52,37 +53,80 @@ public class Shop : MonoBehaviour, IInteractable
             talkCanvas.UpdateLine();
         }
     }
+
     public void HideShopUI()
     {
-        shopUI.gameObject.SetActive(false);
+        shopCanvas.gameObject.SetActive(false);
         IsTalking = false;
         playerMovement.BlockMovement(false);
     }
+
     void ShowShopUI()
     {
         IsTalking = false;
+        shopCanvas.gameObject.SetActive(true);
+        ShowBuy();
+    }
+    public void ShowBuy()
+    {
+        InstanciateBuyItems();
+        HideSell();
+        buyScreen.gameObject.SetActive(true);
+    }
+    void HideBuy()
+    {
+        buyScreen.gameObject.SetActive(false);
+    }
+    
+    public void ShowSell()
+    {
+        InstanciateSellItems();
+        HideBuy();
+        sellScreen.gameObject.SetActive(true);
+    }
+    void HideSell()
+    {
+        sellScreen.gameObject.SetActive(false);
+    }
 
-        for (int i = 0; i < categories.Count; i++)
+    void InstanciateBuyItems()
+    {
+        for (int i = 0; i < buyCategories.Count; i++)
         {
             Destroy(BuyCategoryContainer.GetChild(i).gameObject);
         }
 
-        categories.Clear();
-        InstanciateItems();
-        shopUI.gameObject.SetActive(true);
-    }
+        buyCategories.Clear();
 
-    void InstanciateItems()
-    {
         for (int i = 0; i < ItemList.Length; i++)
         {
-            Transform category = GetCategoriesContainer(ItemList[i].ItemType.ToString());
-            ShopItem newItem = Instantiate(ItemPrefab, category);
-            newItem.SetShopItem(ItemList[i], playerInventory);
+            Transform buyParent = GetCategoriesContainer(ItemList[i].ItemType.ToString(), buyCategories, BuyCategoryContainer);
+            ShopItem newBuyItem = Instantiate(ItemPrefab, buyParent);
+            newBuyItem.SetShopItem(ItemList[i], playerInventory, true);
         }
     }
 
-    Transform GetCategoriesContainer(string name)
+    void InstanciateSellItems()
+    {
+        for (int i = 0; i < sellCategories.Count; i++)
+        {
+            Destroy(SellCategoryContainer.GetChild(i).gameObject);
+        }
+
+        sellCategories.Clear();
+
+        for (int i = 0; i < ItemList.Length; i++)
+        {
+            if (ItemList[i].OnInventory)
+            {
+                Transform sellParent = GetCategoriesContainer(ItemList[i].ItemType.ToString(), sellCategories, SellCategoryContainer);
+                ShopItem newSellItem = Instantiate(ItemPrefab, sellParent);
+                newSellItem.SetShopItem(ItemList[i], playerInventory, false);
+            }
+        }
+    }
+
+    Transform GetCategoriesContainer(string name, List<ItemCategory> categories, Transform parent)
     {
         for (int i = 0; i < categories.Count; i++)
         {
@@ -91,16 +135,10 @@ public class Shop : MonoBehaviour, IInteractable
                 return categories[i].ItemContainer;
             }
         }
-        ItemCategory newCategory = Instantiate(CategoryPrefab, BuyCategoryContainer);
+
+        ItemCategory newCategory = Instantiate(CategoryPrefab, parent);
         newCategory.categoryName.text = name;
         categories.Add(newCategory);
         return newCategory.ItemContainer;
     }
-}
-struct ShopCategory
-{
-    public string name;
-    public string icon;
-    public string inventory;
-    public string price;
 }

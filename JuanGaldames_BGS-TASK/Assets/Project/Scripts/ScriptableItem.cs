@@ -5,7 +5,6 @@ public class ScriptableItem : ScriptableObject
 {
     public Sprite Icon;
     public int Price;
-    public int Id;
     public ItemType ItemType;
     public bool OnInventory;
     public Sprite[] sprites;

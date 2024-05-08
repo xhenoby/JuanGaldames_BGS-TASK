@@ -25,7 +25,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void OnInventory(InputValue inputValue)
     {
-        if (shop.ShopUI.activeInHierarchy || shop.IsTalking) //TODO Canva Controller, also see Shop
+        if (shop.ShopCanvas.activeInHierarchy || shop.IsTalking) //TODO Canva Controller, also see Shop
         {
             return;
         }
@@ -43,12 +43,6 @@ public class PlayerInventory : MonoBehaviour
         inventoryUI.SetActive(true);
         playerMovement.BlockMovement(true);
 
-        for (int i = 0; i < categories.Count; i++)
-        {
-            Destroy(CategoryContainer.GetChild(i).gameObject);
-        }
-        categories.Clear();
-
         InstanciateItems();
     }
     public void HideInventory()
@@ -63,6 +57,12 @@ public class PlayerInventory : MonoBehaviour
     }
     void InstanciateItems()
     {
+        for (int i = 0; i < categories.Count; i++)
+        {
+            Destroy(CategoryContainer.GetChild(i).gameObject);
+        }
+        categories.Clear();
+
         for (int i = 0; i < items.Count; i++)
         {
             Transform category = GetCategoriesContainer(items[i].ItemType);

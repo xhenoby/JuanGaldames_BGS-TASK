@@ -2,7 +2,6 @@ using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class ShopItem : MonoBehaviour
 {
@@ -30,17 +29,17 @@ public class ShopItem : MonoBehaviour
             Buy();
         }
     }
-    public void SetShopItem(ScriptableItem scriptableItem, PlayerInventory playerInventory)
+    public void SetShopItem(ScriptableItem scriptableItem, PlayerInventory playerInventory, bool toBuy)
     {
         this.scriptableItem = scriptableItem;
         this.playerInventory = playerInventory;
-        
-        price.text = scriptableItem.Price.ToString();
+
         icon.sprite = scriptableItem.Icon;
         onInventory = scriptableItem.OnInventory;
+        price.text = (onInventory ? scriptableItem.Price / 2 : scriptableItem.Price).ToString();
 
-        soldSign.SetActive(onInventory);
-        button.interactable = !onInventory;
+        soldSign.SetActive(onInventory && toBuy);
+        button.interactable = (!onInventory == toBuy);
     }
 
     public void Buy()
@@ -59,6 +58,7 @@ public class ShopItem : MonoBehaviour
 
     public void Sell()
     {
+        scriptableItem.OnInventory = false;
         playerInventory.items.Remove(scriptableItem);
         playerInventory.AddMoney(scriptableItem.Price / 2);
         Destroy(gameObject);
