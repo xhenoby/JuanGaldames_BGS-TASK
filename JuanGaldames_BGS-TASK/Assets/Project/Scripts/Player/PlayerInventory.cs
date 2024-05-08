@@ -8,7 +8,7 @@ public class PlayerInventory : MonoBehaviour
     [Header("References")]
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] PlayerAnimation playerAnimation;
-    [SerializeField] Shop shop;
+    [SerializeField] ShopManager shop;
     [SerializeField] GameObject inventoryUI;
     [SerializeField] Transform CategoryContainer;
     [SerializeField] TextMeshProUGUI MoneyText;

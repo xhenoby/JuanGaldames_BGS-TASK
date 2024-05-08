@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shop : MonoBehaviour, IInteractable
+public class ShopManager : MonoBehaviour, IInteractable
 {
     [Header("Settings")]
     [SerializeField] float textSpeed = 0.05f;
     [SerializeField, TextArea] string[] dialogue;
 
     [Header("References")]
-    [SerializeField] Talk talkCanvas;
+    [SerializeField] DialogueManager talkCanvas;
     [SerializeField] GameObject shopCanvas;
     [SerializeField] GameObject sellScreen;
     [SerializeField] GameObject buyScreen;
@@ -29,6 +29,17 @@ public class Shop : MonoBehaviour, IInteractable
     public bool IsTalking { get; private set; }
     public GameObject ShopCanvas { get => shopCanvas; }
 
+    private void Start()
+    {
+        for (int i = 0; i < ItemList.Length; i++)
+        {
+            if (ItemList[i].OnInventory)
+            {
+                playerInventory.items.Add(ItemList[i]);
+            }
+
+        }
+    }
     public void Interact()
     {
         if (playerInventory.InventoryUI.activeInHierarchy)//TODO Canva Controller, also see player Inventory

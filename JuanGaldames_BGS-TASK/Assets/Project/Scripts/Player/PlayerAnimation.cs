@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
@@ -15,6 +14,10 @@ public class PlayerAnimation : MonoBehaviour
     bool hasCloth;
     bool hasHair;
     bool hasHat;
+
+    public ScriptableItem Cloth { get => cloth; }
+    public ScriptableItem Hair { get => hair; }
+    public ScriptableItem Hat { get => hat; }
 
     private void Start()
     {
@@ -45,42 +48,21 @@ public class PlayerAnimation : MonoBehaviour
 
     public void ChangeCloth(ScriptableItem cloth)
     {
-        if (cloth == null)
-        {
-            hasCloth = false;
-            clothRenderer.gameObject.SetActive(hasCloth);
-            return;
-        }
-
-        hasCloth = true;
+        hasCloth = (cloth != null);
         clothRenderer.gameObject.SetActive(hasCloth);
         this.cloth = cloth;
     }
 
     public void ChangeHair(ScriptableItem hair)
     {
-        if (hair == null)
-        {
-            hasHair = false;
-            hairRenderer.gameObject.SetActive(!hasHat && hasHair);
-            return;
-        }
-
-        hasHair = true;
+        hasHair = (hair != null);
         hairRenderer.gameObject.SetActive(!hasHat && hasHair);
         this.hair = hair;
     }
+
     public void ChangeHat(ScriptableItem hat)
     {
-        if (hat == null)
-        {
-            hasHat = false;
-            hatRenderer.gameObject.SetActive(hasHat);
-            hairRenderer.gameObject.SetActive(!hasHat && hasHair);
-            return;
-        }
-
-        hasHat = true;
+        hasHat = (hat != null);
         hatRenderer.gameObject.SetActive(hasHat);
         hairRenderer.gameObject.SetActive(!hasHat && hasHair);
         this.hat = hat;

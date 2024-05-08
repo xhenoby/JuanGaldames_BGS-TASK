@@ -58,6 +58,21 @@ public class ShopItem : MonoBehaviour
 
     public void Sell()
     {
+        PlayerAnimation playerAnimation = playerInventory.GetComponent<PlayerAnimation>();
+
+        if (scriptableItem == playerAnimation.Cloth)
+        {
+            playerAnimation.ChangeCloth(null);
+        }
+        else if (scriptableItem == playerAnimation.Hat)
+        {
+            playerAnimation.ChangeHat(null);
+        }
+        else if (scriptableItem == playerAnimation.Hair)
+        {
+            playerAnimation.ChangeHair(null);
+        }
+
         scriptableItem.OnInventory = false;
         playerInventory.items.Remove(scriptableItem);
         playerInventory.AddMoney(scriptableItem.Price / 2);

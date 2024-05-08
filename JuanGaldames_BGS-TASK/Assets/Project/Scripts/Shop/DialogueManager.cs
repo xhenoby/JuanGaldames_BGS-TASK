@@ -3,14 +3,17 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class Talk : MonoBehaviour
+public class DialogueManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI textMeshProUGUI;
-    [SerializeField] AudioSource talkAudioSource;
+    [Header("References")]
+    [SerializeField] TextMeshProUGUI dialogueTextMeshPro;
+    [SerializeField] AudioSource dialogueAudioSource;
+
     string[] dialogue;
     float textSpeed = 0.05f;
     int index;
     Action onFinish;
+
     public void ShowDialogue(Action onFinish, float textSpeed, string[] dialogue)
     {
         gameObject.SetActive(true);
@@ -21,6 +24,7 @@ public class Talk : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(Type());
     }
+
     public void Hide()
     {
         gameObject.SetActive(false);
@@ -28,26 +32,26 @@ public class Talk : MonoBehaviour
 
     IEnumerator Type()
     {
-        textMeshProUGUI.text = "";
+        dialogueTextMeshPro.text = "";
         for (int character = 0; character < dialogue[index].Length; character++)
         {
-            talkAudioSource.pitch = (UnityEngine.Random.Range(1, 1.3f));
-            talkAudioSource.PlayOneShot(talkAudioSource.clip);
-            textMeshProUGUI.text += dialogue[index][character];
+            dialogueAudioSource.pitch = (UnityEngine.Random.Range(1, 1.3f));
+            dialogueAudioSource.PlayOneShot(dialogueAudioSource.clip);
+            dialogueTextMeshPro.text += dialogue[index][character];
             yield return new WaitForSeconds(textSpeed);
         }
     }
 
     public void UpdateLine()
     {
-        if (textMeshProUGUI.text == dialogue[index])
+        if (dialogueTextMeshPro.text == dialogue[index])
         {
             NextLine();
         }
         else
         {
             StopAllCoroutines();
-            textMeshProUGUI.text = dialogue[index];
+            dialogueTextMeshPro.text = dialogue[index];
         }
     }
 

@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 6265592807959147385}
-  Button: {fileID: 6265592806803069637}
+  button: {fileID: 6265592806803069637}
 --- !u!114 &6265592806803069637
 MonoBehaviour:
   m_ObjectHideFlags: 0
